@@ -1,17 +1,28 @@
-#include <iostream>
-#include <string>
+//
+//  GamePlay.hpp
+//  quizgame
+//
+//  Created by Yến  on 30/03/2023.
+//
+
+#ifndef GamePlay_hpp
+#define GamePlay_hpp
+
+#include <stdio.h>
 #include <vector>
-#include <Player.h>
-#include <Question.h>
+#include <string>
+#include "Player.hpp"
+#include "Question.hpp"
+
 class GamePlay
 {
 private:
     std::vector<Player> players;
-    int noPlayerRemained; // number of qualified players
+    int numPlayerRemained; // number of qualified players
     int currentPlayer; // keep track of answer turn for the player, currently in ascending order, no randomized
 
     std::vector<Question> questions;
-    int noQuestionRemained; // number of question remain
+    int numQuestionRemained; // number of question remain
 
 public:
     // constructors
@@ -20,12 +31,12 @@ public:
 
     // initialization
     void initPlayers(std::vector<std::string> usernames);
-    void initQuestions(); 
+    void initQuestions();
     
     // process management
     void processPlayerAnswer();
     void processMoveTurn();
-    void processNextTurn(); 
+    void processNextTurn();
     void endGamePlay();
 
     // player management
@@ -36,9 +47,9 @@ public:
     int getNumOfQuestions();
     std::vector<std::string> getPlayers(); // trả về usernames
     void getNextQuestion(); // cái hàm này trả về câu hỏi và 4 câu trả lời
-    bool checkAnswer(int questIndex); 
+    bool checkAnswer(int questIndex);
 
-}
+};
 
-// Game play
-// when created, stored list of players and list of questions
+
+#endif /* GamePlay_hpp */

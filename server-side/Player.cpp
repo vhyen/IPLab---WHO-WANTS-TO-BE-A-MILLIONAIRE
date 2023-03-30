@@ -1,7 +1,10 @@
-#include <Player.h>
+#include "Player.hpp"
+
 
 Player::Player() {
-
+    username = "skyvalue";
+    isQualified = true;
+    haveMove = true;
 }
 
 Player::Player(std::string username) {
