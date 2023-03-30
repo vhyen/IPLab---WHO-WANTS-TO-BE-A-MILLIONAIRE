@@ -1,13 +1,11 @@
 #include <string>
-
-
-struct Player {
+class Player {
     public: 
     std::string username;
     bool isQualified; 
     bool haveMove;
-    
+
     Player();
     Player(std::string username);
-}
+};
 

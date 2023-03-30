@@ -8,4 +8,4 @@ struct Question {
 
     Question();
     Question(std::string question, std::string optionA, std::string optionB, std::string optionC, std::string optionD, std::string answer);
-}
+};

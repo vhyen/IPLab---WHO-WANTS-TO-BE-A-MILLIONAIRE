@@ -1,14 +1,16 @@
 #include <iostream>
 #include <string>
-
+#include <vector>
+#include <Player.h>
+#include <Question.h>
 class GamePlay
 {
 private:
-    // list of Players
+    std::vector<Player> players;
     int noPlayerRemained; // number of qualified players
     int currentPlayer; // keep track of answer turn for the player, currently in ascending order, no randomized
 
-    // list of Questions
+    std::vector<Question> questions;
     int noQuestionRemained; // number of question remain
 
 public:
@@ -17,7 +19,7 @@ public:
     // destructor ??
 
     // initialization
-    void initPlayers();
+    void initPlayers(std::vector<std::string> usernames);
     void initQuestions(); 
     
     // process management
