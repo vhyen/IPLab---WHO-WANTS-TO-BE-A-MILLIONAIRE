@@ -50,11 +50,6 @@ int QuestionManager::retrieveQuestionsFromFile(std::string filename) {
     // } 
 }
 
-    // random number of questions
-    // int num = int(players.size());
-
-
-
 std::vector<Question> QuestionManager::generateRandomQuestion(int n) {
     srand(static_cast<unsigned int>(time(0)));
     int numQuest = rand() % n + n * 2;

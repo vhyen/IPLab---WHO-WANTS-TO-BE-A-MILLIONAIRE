@@ -11,18 +11,26 @@
 #include <stdio.h>
 #include <vector>
 #include <string>
+#include <fstream>
+#include <iostream>
+
 #include "Player.hpp"
-#include "Question.hpp"
+#include "QuestionManager.hpp"
 
 class GamePlay
 {
 private:
     std::vector<Player> players;
-    int numPlayerRemained; // number of qualified players
-    int currentPlayer; // keep track of answer turn for the player, currently in ascending order, no randomized
+    int numPlayerRemained; 
+    // number of qualified players
+    int currentPlayer; 
+    // keep track of answer turn for the player, 
+    // currently in ascending order, no randomized
 
     std::vector<Question> questions;
-    int numQuestionRemained; // number of question remain
+    int currentQuestion; // number of question remain
+    bool isEnd;
+    std::string winner;
 
 public:
     // constructors
@@ -34,20 +42,22 @@ public:
     void initQuestions();
     
     // process management
-    void processPlayerAnswer();
+    int processPlayerChoice(int option);
     void processMoveTurn();
-    void processNextTurn();
-    void endGamePlay();
+    void processNextPlayer();
+    bool isEndGame();
+    std::string getWinner();
 
     // player management
-    void disqualifyPlayer();
-    void moveTurn();
+    void disqualifyCurrentPlayer();
+    int moveTurn();
+    std::string nextPlayer();
 
     // question management
     int getNumOfQuestions();
     std::vector<std::string> getPlayers(); // trả về usernames
-    void getNextQuestion(); // cái hàm này trả về câu hỏi và 4 câu trả lời
-    bool checkAnswer(int questIndex);
+    Question getQuestion(); // cái hàm này trả về câu hỏi và 4 câu trả lời
+    bool checkAnswer(int ans);
 
 };
 
