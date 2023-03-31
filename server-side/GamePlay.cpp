@@ -43,7 +43,6 @@ int GamePlay::processPlayerChoice(int option) {
     if (option == 0) {
         // xu ly player da xai move roi?
         players[currentPlayer].haveMove = false;
-        return 1;
     }
     else {
         if (!checkAnswer(option)) disqualifyCurrentPlayer();
@@ -63,7 +62,7 @@ void GamePlay::processMoveTurn() {
 }
 
 void GamePlay::processNextPlayer() {
-    currentPlayer++;
+    currentPlayer = (currentPlayer == players.size() - 1) ? 0 : currentPlayer + 1;
     while (!players[currentPlayer].isQualified) {
         currentPlayer++;
         if (currentPlayer == players.size()) currentPlayer = 0;
@@ -75,7 +74,7 @@ bool GamePlay::isEndGame() {
 }
 
 std::string GamePlay::getWinner() {
-    
+    return winner;
 }
 
 // player management
