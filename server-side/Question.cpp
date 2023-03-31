@@ -3,7 +3,7 @@
 
 Question::Question() {
     question = "";
-    
+    answer = "";
 };
 
 Question::Question(std::string quest, std::string optionA, std::string optionB, std::string optionC, std::string optionD, std::string ans) {

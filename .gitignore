@@ -34,3 +34,11 @@
 
 #test
 server-side/test.cpp
+test
+
+
+# datafile
+questions.dat
+
+#vscode
+.vscode

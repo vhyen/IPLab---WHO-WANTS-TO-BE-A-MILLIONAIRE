@@ -4,8 +4,6 @@
 #include <stdio.h>
 #include <string>
 #include <vector>
-
-
 class Question {
     public:
     std::string question;

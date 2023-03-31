@@ -37,39 +37,8 @@ void GamePlay::initPlayers(std::vector<std::string> usernames)
 
 void GamePlay::initQuestions()
 {
-    std::cout << "GamePlay init questions\n";
-    // random number of questions
-    int num = int(players.size());
-    srand(static_cast<unsigned int>(time(0)));
-    numQuestionRemained = rand() % num + num * 3;
-    std::cout << "number of questions: " << numQuestionRemained << std::endl;
-
-    std::string filename = "questions.dat";
-    std::vector<std::string> questData;
-    std::string line;
-
-    std::fstream file2("ac.txt", std::ios::out);
-    file2 << "askljds";
-    file2.close();
-
-    // get random questions from files
-    std::fstream file(filename, std::ios::in);
-    if (file.is_open())
-    {
-        while (getline(file, line))
-        {
-            questData.push_back(line);
-        }
-    }
-    else
-        std::cout << "Could not open the file\n";
-    file.close();
-
-    for (std::string each : questData)
-    {
-        std::cout << each << std::endl;
-    }
-    //
+    
+    // quest tra ve random cau hoi
 
     numQuestionRemained = int(questions.size());
 }
