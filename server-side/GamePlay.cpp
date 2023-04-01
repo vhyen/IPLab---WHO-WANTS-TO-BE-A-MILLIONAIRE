@@ -35,11 +35,17 @@ void GamePlay::initQuestions()
 {
     std::cout << "GamePlay init questions\n";
     QuestionManager* questionManager = QuestionManager::getInstance();
-    questions = questionManager->generateRandomQuestion(players.size());
+    questions = questionManager->generateRandomQuestion(2);
+    // std::cout << "Number of questions: " << questions.size() << std::endl;
 }
 
 // process management
 int GamePlay::processPlayerChoice(int option) {
+    if (currentQuestion == questions.size() - 1) {
+        winner = players[currentPlayer].username;
+        isEnd = true;
+        return 1;
+    } 
     if (option == 0) {
         // xu ly player da xai move roi?
         players[currentPlayer].haveMove = false;
@@ -48,11 +54,6 @@ int GamePlay::processPlayerChoice(int option) {
         if (!checkAnswer(option)) disqualifyCurrentPlayer();
         currentQuestion++;
     }
-    if (currentQuestion >= questions.size()) {
-        winner = players[currentPlayer].username;
-        isEnd = true;
-        return 1;
-    } 
     processNextPlayer();
     return 1;
 }
