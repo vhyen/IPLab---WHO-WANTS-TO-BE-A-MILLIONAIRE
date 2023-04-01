@@ -17,14 +17,46 @@ GamePlay::GamePlay()
     isEnd = false;
     winner = "";
 }
+bool GamePlay::registerOK(std::string name)
+{
+    bool check;
+    if (name.length()>10)
+    {
+        // To users: std::cout<<"Username is too long. Choose another\n";
+        return false;
+    }
+    for (int j=0; j<name.length(); ++j)
+    {
+        check=((name[j] >= 'a') && (name[j] <= 'z')) || 
+        ((name[j] >= 'A') && (name[j] <= 'Z')) || ((name[j] >= '0') && (name[j] <= '9')) || (name[j]=='_');
+        if (check==false)
+        {
+            // To users: std::cout<<"Disqualified username. Choose another (consists of upper/lower case letters and/or digits and/or underscore\n";
+            return false;
+        }
+    }
+    for (int i=0; i<players.size(); ++i)
+    {
+        if (name.compare(players[i].username)==0)
+        {
+            // To users: std::cout<<"Already registered username. Choose another\n";
+            return false;
+        }
+    }
+    // To users: std::cout<<"Successfully assigned username.\n";
+    return true;
+}
 
 void GamePlay::initPlayers(std::vector<std::string> usernames)
 {
     std::cout << "GamePlay init players\n";
     for (std::string username : usernames)
     {
+        if (registerOK(username))
+        {
         Player player = Player(username);
         players.push_back(player);
+        }
     }
     numPlayerRemained = int(players.size());
     currentPlayer = 0;

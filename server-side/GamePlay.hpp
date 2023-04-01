@@ -40,6 +40,7 @@ public:
     // initialization
     void initPlayers(std::vector<std::string> usernames);
     void initQuestions();
+    bool registerOK(std::string name);
     
     // process management
     int processPlayerChoice(int option);
