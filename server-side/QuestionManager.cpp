@@ -60,3 +60,7 @@ std::vector<Question> QuestionManager::generateRandomQuestion(int n) {
     if (numQuest < list.size()) list.resize(numQuest);
     return list;
 }
+
+int QuestionManager::getNumOfDB() {
+    return questDB.size();
+}

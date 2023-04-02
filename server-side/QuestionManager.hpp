@@ -23,6 +23,7 @@ class QuestionManager {
     static QuestionManager* getInstance();
     int retrieveQuestionsFromFile(std::string filename);
     std::vector<Question> generateRandomQuestion(int n);
+    int getNumOfDB();
 };
 
 #endif /* QuestionManager_hpp */

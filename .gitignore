@@ -42,3 +42,11 @@ questions.dat
 
 #vscode
 .vscode
+client-side/assets/.DS_Store
+.gitignore
+client-side/assets/img/sprites/.DS_Store
+client-side/.DS_Store
+client-side/client
+.gitignore
+client-side/assets/img/.DS_Store
+.DS_Store
