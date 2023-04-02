@@ -104,19 +104,6 @@ void Play::PlayATurn(std::string question, std::string optionA, std::string opti
     std::cin >> choice;
     while (choice != 'a' && choice != 'b' && choice != 'c' && choice != 'd' && choice != 'A' && choice != 'B' && choice != 'C' && choice != 'D')
     {
-<<<<<<< HEAD
-        std::cout << "Invalid choice. Choose again." << std::endl;
-        std::cin >> choice;
-    }
-    // Send choice to server, server checks if this user stil qualified, or winner, ...
-    // Receive message from server.
-    // If not qualified anymore:
-    // this->stillQualified=false;
-    // If winner
-    // Display congratualation message!
-    // If still qualified
-    // go back to waiting status. Displaying waiting GUI
-=======
         //Send message to server to forward the question. Send char S.
         char *skipChoice=new char[1];
         char *skipApprove=new char[1];
@@ -158,5 +145,4 @@ void Play::PlayATurn(std::string question, std::string optionA, std::string opti
        //Display error message!
     }
 
->>>>>>> 399f7dcaccf2fecaa8ed586b51db4627efde85fd
 }
