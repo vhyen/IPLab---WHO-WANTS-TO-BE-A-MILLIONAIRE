@@ -2,12 +2,35 @@
 #include <iostream>
 
 #include "SharedResource.hpp"
-
+#include "Register.hpp"
 SharedResource *SharedResource::instance = nullptr; 
 
 int main()
 {
-    
+    sf::RenderWindow window(sf::VideoMode(2560, 1440), "Who wants to be millionaire?");
+
+    Register rgt(&window);   
+
+    // rgt.render();
+    sf::Texture texture;
+    texture.loadFromFile("../client-side/assets/img/sprites/frog-idle.png");
+    sf::IntRect rectSprite(0, 0, 32, 32);
+    sf::Sprite sprite; //(texture, rectSprite);
+    sprite.setTexture(texture);
+    sprite.setTextureRect(rectSprite);
+    sprite.setPosition(500, 500);
+    sprite.scale(sf::Vector2f(3, 3));
+
+    // rgt.background.setTexture(texture);
+    while (window.isOpen()) {
+        rgt.updatePollEvents();
+        window.clear();
+        rgt.render();
+        // window.draw(sprite);
+        
+        window.display();
+    }
+
 
     return 0;
 }
@@ -31,7 +54,9 @@ void ingamescreen() {
     sf::Texture texture;
     texture.loadFromFile("../client-side/assets/img/sprites/frog-idle.png");
     sf::IntRect rectSprite(0, 0, 32, 32);
-    sf::Sprite sprite(texture, rectSprite);
+    sf::Sprite sprite; //(texture, rectSprite);
+    sprite.setTexture(texture);
+    sprite.setTextureRect(rectSprite);
     sprite.setPosition(avt_pos_x, avt_pos_y);
     sprite.scale(sf::Vector2f(3, 3));
 
@@ -41,8 +66,6 @@ void ingamescreen() {
     sf::Text text("username", font, 24);
     text.setFillColor(sf::Color::Black);
     text.setPosition(username_pos_x, username_pos_y);
-
-
 
     // background for player list
     sf::RectangleShape rect;

@@ -6,6 +6,7 @@
 
 class Question {
     public:
+    std::string question;
     std::string optionA, optionB, optionC, optionD;
     std::string ans;    
 };

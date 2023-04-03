@@ -1,5 +1,9 @@
 #include "SharedResource.hpp"
 
+SharedResource::SharedResource() {
+    
+}
+
 SharedResource* SharedResource::getInstance() {
     if (!instance) {
         instance = new SharedResource();
