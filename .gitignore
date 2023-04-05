@@ -50,3 +50,4 @@ client-side/client
 .gitignore
 client-side/assets/img/.DS_Store
 .DS_Store
+client-side/draft.cpp

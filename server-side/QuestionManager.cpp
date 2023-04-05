@@ -52,7 +52,7 @@ int QuestionManager::retrieveQuestionsFromFile(std::string filename) {
 
 std::vector<Question> QuestionManager::generateRandomQuestion(int n) {
     srand(static_cast<unsigned int>(time(0)));
-    int numQuest = rand() % n + n * 2;
+    int numQuest = rand() % n + n * 3;
     std::cout << "number of questions: " << numQuest << std::endl;
     std::vector<Question> list;
     list.assign(questDB.begin(), questDB.end());
