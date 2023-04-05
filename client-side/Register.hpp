@@ -7,6 +7,7 @@
 class Register {
     private:
     //window
+    bool isDone;
     sf::RenderWindow* window;
     // resources
     sf::Font font;
@@ -26,4 +27,5 @@ class Register {
     void updatePollEvents();
     void render();
     std::string getUsername();
+    bool isDoneRegister();
 };

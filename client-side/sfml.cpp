@@ -1,19 +1,21 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-#include "SharedResource.hpp"
-#include "Register.hpp"
-SharedResource *SharedResource::instance = nullptr; 
+// #include "SharedResource.hpp"
+// #include "Register.hpp"
+// SharedResource *SharedResource::instance = nullptr; 
 
-int main()
+int main1()
 {
     sf::RenderWindow window(sf::VideoMode(2560, 1440), "Who wants to be millionaire?");
 
-    Register rgt(&window);   
+    // Register rgt(&window);   
+    // std::cout << rgt.isDoneRegister() << std::endl;
 
     // rgt.render();
     sf::Texture texture;
-    texture.loadFromFile("../client-side/assets/img/sprites/frog-idle.png");
+    texture.loadFromFile("../client-side/assets/images/sprites/frog-idle.png");
+    std::cout << texture.getSize().x << " " << texture.getSize().y << std::endl;
     sf::IntRect rectSprite(0, 0, 32, 32);
     sf::Sprite sprite; //(texture, rectSprite);
     sprite.setTexture(texture);
@@ -22,15 +24,20 @@ int main()
     sprite.scale(sf::Vector2f(3, 3));
 
     // rgt.background.setTexture(texture);
-    while (window.isOpen()) {
-        rgt.updatePollEvents();
-        window.clear();
-        rgt.render();
-        // window.draw(sprite);
-        
-        window.display();
-    }
+    // rgt.render();
+    // std::cout << rgt.getUsername() << std::endl;
 
+    // while(window.isOpen()) {
+    //     sf::Event event;
+    //     while (window.pollEvent(event))
+    //     {
+    //         if (event.type == sf::Event::Closed)
+    //             window.close();
+    //     }
+    //     window.clear();
+    //     window.draw(sprite);
+    //     window.display();
+    // }
 
     return 0;
 }
@@ -52,7 +59,7 @@ void ingamescreen() {
 
     // avatar
     sf::Texture texture;
-    texture.loadFromFile("../client-side/assets/img/sprites/frog-idle.png");
+    texture.loadFromFile("../client-side/assets/images/sprites/frog-idle.png");
     sf::IntRect rectSprite(0, 0, 32, 32);
     sf::Sprite sprite; //(texture, rectSprite);
     sprite.setTexture(texture);
@@ -62,7 +69,7 @@ void ingamescreen() {
 
     // username
     sf::Font font;
-    if (!font.loadFromFile("../client-side/assets/font/Poppins-Medium.ttf")) std::cout << "Error loading font\n";
+    if (!font.loadFromFile("../client-side/assets/fonts/Poppins-Medium.ttf")) std::cout << "Error loading font\n";
     sf::Text text("username", font, 24);
     text.setFillColor(sf::Color::Black);
     text.setPosition(username_pos_x, username_pos_y);
