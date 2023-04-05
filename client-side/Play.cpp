@@ -6,6 +6,38 @@ Play::Play()
     this->join=false;
     this->stillQualified=false;
     //Display entering screen
+
+    // set up displaying question
+    posQuestion = sf::Vector2f(300, 420);
+    posOptA = sf::Vector2f(144, 762); 
+    posOptB = sf::Vector2f(1048, 762); 
+    posOptC = sf::Vector2f(144, 1040); 
+    posOptD = sf::Vector2f(1048, 1040); 
+    sizeOpt = sf::Vector2f(823, 154);
+
+    int paddingx = 44, paddingy = 40;
+
+    font.loadFromFile("../client-side/assets/fonts/Poppins-Medium.ttf");
+    question.setFont(font); optA.setFont(font); optB.setFont(font); optC.setFont(font); optD.setFont(font);
+    question.setFillColor(sf::Color::White); optA.setFillColor(sf::Color::White); optB.setFillColor(sf::Color::White); optC.setFillColor(sf::Color::White); optD.setFillColor(sf::Color::White);
+    question.setCharacterSize(64);
+    question.setPosition(posQuestion);
+    optA.setCharacterSize(32);
+    optB.setCharacterSize(32);
+    optC.setCharacterSize(32);
+    optD.setCharacterSize(32);
+    optA.setPosition(posOptA.x + paddingx, posOptA.y+paddingy);
+    optB.setPosition(posOptB.x + paddingx, posOptB.y+paddingy);
+    optC.setPosition(posOptC.x + paddingx, posOptC.y+paddingy);
+    optD.setPosition(posOptD.x + paddingx, posOptD.y+paddingy);
+
+    // test
+    question.setString("What is a lunar eclipse?");
+    optA.setString("A. When the Earth is in between the sun and \nthe moon");
+    optB.setString("B. When the moon is in between the Earth \nand the sun");
+    optC.setString("C. When the sun is in between the Earth \nand the moon");
+    optD.setString("D. When the moon is closest to the Earth");
+
 }
 
 void Play::setWindow(sf::RenderWindow* wd) {
@@ -14,8 +46,7 @@ void Play::setWindow(sf::RenderWindow* wd) {
 
 void Play::Init()
 {
-    
-    //Display initial screen;
+
 }
 
 void Play::Registered()
@@ -139,6 +170,15 @@ void Play::PlayATurn(std::string question, std::string optionA, std::string opti
 }
 
 
+void Play::handleClickEvent(int x, int y) {
+    if (x >= posOptA.x && x <= posOptB.x + sizeOpt.x && y >= posOptA.y && y <= posOptC.y + sizeOpt.y) {
+        if (x <= posOptA.x + sizeOpt.x && y <= posOptA.y + sizeOpt.y) std::cout << "Answer A\n";
+        else if (x <= posOptC.x + sizeOpt.x && y >= posOptC.y) std::cout << "Answer C\n";
+        else if (x >= posOptB.x && y <= posOptB.y + sizeOpt.y) std::cout << "Answer B\n";
+        else if (x >= posOptD.x && y >= posOptD.y) std::cout << "Answer D\n";
+    }
+}
+
 void Play::initPlayers(std::vector<std::string> _usernames) {
     std::cout << "Play init players\n";
     // usernames.assign(_usernames.begin(), _usernames.end());
@@ -147,16 +187,38 @@ void Play::initPlayers(std::vector<std::string> _usernames) {
         Player player(each);
         players.push_back(player);
     }
-    
 }
 
 void Play::renderPlayers() {
-    std::cout << "render players\n";
     for (int i = 0; i< players.size(); i++) players[i].render(window);
 }
 
+void Play::renderQuestion() {
+    window->draw(question);
+    window->draw(optA);
+    window->draw(optB);
+    window->draw(optC);
+    window->draw(optD);
+}
+
+void Play::animatePlayers() {
+    if (clock.getElapsedTime().asSeconds() > 0.02f)
+        {
+            for (int i = 0; i < players.size(); i++) {
+                if (players[i].rectSprite.left == players[i].texture.getSize().x - 32) {
+                    players[i].rectSprite.left = 0;
+                }
+                else {
+                    players[i].rectSprite.left += 32;
+                }
+                players[i].sprite.setTextureRect(players[i].rectSprite);
+            }
+            clock.restart();
+        }
+}
+
 void Play::render() {
-    int x = 2000, initialY = 700;
+    int x = 2040, initialY = 500;
 
     sf::Sprite bkgr;
     sf::Texture t;
@@ -164,21 +226,28 @@ void Play::render() {
     bkgr.setTexture(t);
     bkgr.scale(sf::Vector2f(1.34, 1.34));
     bkgr.setPosition(0, 0);
-
     
     // player.initAvt(3);
     for (int i = 0; i < players.size(); i++) 
         players[i].initResource(i, sf::Vector2f(x, initialY + i*180));
+
     while (window->isOpen()) {
         sf::Event event;
         while (window->pollEvent(event))
         {
             if (event.type == sf::Event::Closed)
                 window->close();
+            if (event.type == sf::Event::MouseButtonPressed) {
+                if (event.mouseButton.button == sf::Mouse::Left) {
+                    handleClickEvent(event.mouseButton.x, event.mouseButton.y);
+                }
+            }
         }
+        animatePlayers();
         window->clear();
         window->draw(bkgr);
-        for (int i = 0; i < players.size(); i++) players[i].render(window);
+        renderPlayers();
+        renderQuestion();
         window->display();
     }
 }

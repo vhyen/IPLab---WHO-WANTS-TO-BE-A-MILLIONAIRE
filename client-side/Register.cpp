@@ -4,6 +4,7 @@ Register::Register()
 {
     window = new sf::RenderWindow(sf::VideoMode(2560, 1440), "Who is millionaire?");
     isDone = false;
+    isNoti = false;
     initResource();
 }
 
@@ -34,6 +35,12 @@ void Register::initResource()
     playerInput.setCharacterSize(52);
     playerInput.setColor(sf::Color::White);
     playerInput.setPosition(1000, 800);
+    // display notification
+    displayNoti.setFont(font);
+    displayNoti.setCharacterSize(40);
+    displayNoti.setColor(sf::Color::Yellow);
+    displayNoti.setPosition(780, 1200);
+    displayNoti.setString("");
 }
 
 void Register::updatePollEvents()
@@ -46,14 +53,6 @@ void Register::updatePollEvents()
             // handling close events (including closing socket ... )
             window->close();
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
-        {
-            std::cout << username << std::endl;
-            isDone = true;
-            std::cout << "Enter\n";
-            window->clear();
-            // break;
-        }
         if (event.type == sf::Event::TextEntered)
         {
             if ((event.text.unicode >= 48 && event.text.unicode <= 57) // 0 - 9
@@ -61,16 +60,27 @@ void Register::updatePollEvents()
                 || event.text.unicode == 95 
                 || (event.text.unicode >= 97 && event.text.unicode <= 122)) // a - z
             {
-                username += event.text.unicode;
-                playerInput.setString(username);
+                if (username.size() == 10) { // handle maximum characters
+                    displayNoti.setString("maximum 10 characters");
+                }
+                else {
+                    username += event.text.unicode;
+                    playerInput.setString(username);
+                    displayNoti.setString("");
+                }
             }
-            if (event.text.unicode == 8) {
+            else if (event.text.unicode == 8) {
                 if (username.length() != 0) username.pop_back();
                 playerInput.setString(username);
+                displayNoti.setString("");
             }
-            if (event.text.unicode == 46) { // cannot hit enter in mac :v so hit . to enter
+            else if (event.text.unicode == 46) { // cannot hit enter in mac :v so hit . to enter
                 isDone = true;
                 std::cout << "Enter hit\n";
+            }
+            else {
+                // handle inputting other stuffs
+                displayNoti.setString("only accept letters, digits and underscores");
             }
         }
     }
@@ -83,6 +93,7 @@ void Register::render()
         window->clear();
         window->draw(background);
         window->draw(playerInput);
+        window->draw(displayNoti);
         window->display();
     }
 }

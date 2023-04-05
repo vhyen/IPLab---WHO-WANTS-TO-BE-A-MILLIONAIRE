@@ -1,9 +1,9 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-// #include "SharedResource.hpp"
+#include "SharedResource.hpp"
 // #include "Register.hpp"
-// SharedResource *SharedResource::instance = nullptr; 
+SharedResource *SharedResource::instance = nullptr; 
 
 int main1()
 {

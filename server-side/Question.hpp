@@ -6,6 +6,7 @@
 #include <vector>
 class Question {
     public:
+    std::string answerer;
     std::string question;
     std::vector<std::string> options;
     std::string answer;

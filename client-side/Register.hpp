@@ -15,6 +15,7 @@ class Register {
     sf::Sprite background;
     
     sf::Text playerInput, displayNoti;
+    bool isNoti;
     std::string username;
 
     void initResource();
