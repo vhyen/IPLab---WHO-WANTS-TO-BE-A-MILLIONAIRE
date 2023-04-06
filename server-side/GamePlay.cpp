@@ -14,7 +14,7 @@ GamePlay::GamePlay()
     numPlayerRemained = 0;
     currentPlayer = 0;
     currentQuestion = 0;
-    isEnd = false;
+    isEnd = true;
     winner = "";
 }
 // bool GamePlay::registerOK(std::string name)
@@ -68,7 +68,16 @@ void GamePlay::initQuestions()
     // std::cout << "Number of questions: " << questions.size() << std::endl;
 }
 
+
+
 // process management
+
+void GamePlay::startGame(std::vector<std::string> usernames) {
+    isEnd = false;
+    initPlayers(usernames);
+    initQuestions();
+}
+
 int GamePlay::processPlayerChoice(int option) {
     if (currentQuestion == questions.size() - 1) {
         winner = players[currentPlayer].username;
@@ -143,6 +152,8 @@ bool GamePlay::checkAnswer(int ans) {
 }
 
 
+// question management
+
 Question GamePlay::getQuestion() {
     Question q = Question();
     q.question = questions[currentQuestion].question;
@@ -151,6 +162,9 @@ Question GamePlay::getQuestion() {
     return q;
 }
 
+int GamePlay::getNumOfQuestions() {
+    return questions.size();
+}
 
 
 

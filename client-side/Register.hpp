@@ -11,7 +11,7 @@ class Register {
     sf::RenderWindow* window;
     // resources
     sf::Font font;
-    sf::Texture texture;
+    sf::Texture texture, scrWaiting;
     sf::Sprite background;
     
     sf::Text playerInput, displayNoti;
@@ -19,14 +19,15 @@ class Register {
     std::string username;
 
     void initResource();
-    bool validateUsername();
 
     public:
     Register();
     Register(sf::RenderWindow* window);
     virtual ~Register();
     void updatePollEvents();
+    void existedUsername();
     void render();
+    void renderWaiting();
     std::string getUsername();
     bool isDoneRegister();
 };

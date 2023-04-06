@@ -25,6 +25,7 @@ void Register::initResource()
     // font
     font.loadFromFile("../client-side/assets/fonts/Poppins-Medium.ttf");
     // background
+    scrWaiting.loadFromFile("../client-side/assets/images/backgrounds/wait-background.png");
     if (!texture.loadFromFile("../client-side/assets/images/backgrounds/register-background.png"))
         std::cout << "cannot load texture\n";
     background.setTexture(texture);
@@ -55,30 +56,35 @@ void Register::updatePollEvents()
         }
         if (event.type == sf::Event::TextEntered)
         {
-            if ((event.text.unicode >= 48 && event.text.unicode <= 57) // 0 - 9
-                || (event.text.unicode >= 65 && event.text.unicode <= 90)  // A - Z
-                || event.text.unicode == 95 
-                || (event.text.unicode >= 97 && event.text.unicode <= 122)) // a - z
+            if ((event.text.unicode >= 48 && event.text.unicode <= 57)                                  // 0 - 9
+                || (event.text.unicode >= 65 && event.text.unicode <= 90)                               // A - Z
+                || event.text.unicode == 95 || (event.text.unicode >= 97 && event.text.unicode <= 122)) // a - z
             {
-                if (username.size() == 10) { // handle maximum characters
+                if (username.size() == 10)
+                { // handle maximum characters
                     displayNoti.setString("maximum 10 characters");
                 }
-                else {
+                else
+                {
                     username += event.text.unicode;
                     playerInput.setString(username);
                     displayNoti.setString("");
                 }
             }
-            else if (event.text.unicode == 8) {
-                if (username.length() != 0) username.pop_back();
+            else if (event.text.unicode == 8)
+            {
+                if (username.length() != 0)
+                    username.pop_back();
                 playerInput.setString(username);
                 displayNoti.setString("");
             }
-            else if (event.text.unicode == 46) { // cannot hit enter in mac :v so hit . to enter
+            else if (event.text.unicode == 46)
+            { // cannot hit enter in mac :v so hit . to enter
                 isDone = true;
                 std::cout << "Enter hit\n";
             }
-            else {
+            else
+            {
                 // handle inputting other stuffs
                 displayNoti.setString("only accept letters, digits and underscores");
             }
@@ -86,9 +92,15 @@ void Register::updatePollEvents()
     }
 }
 
+void Register::existedUsername()
+{
+    displayNoti.setString("This username is alreaday existed.\nPlease choose another one. ");
+}
+
 void Register::render()
 {
-    while (window->isOpen() && !isDone) {
+    while (window->isOpen() && !isDone)
+    {
         updatePollEvents();
         window->clear();
         window->draw(background);
@@ -103,11 +115,28 @@ std::string Register::getUsername()
     return username;
 }
 
-bool Register::validateUsername() // send to server and waiting for respond
+bool Register::isDoneRegister()
 {
-    return true;
+    return isDone;
 }
 
-bool Register::isDoneRegister() {
-    return isDone;
+void Register::renderWaiting()
+{
+    background.setTexture(scrWaiting);
+    while (window->isOpen())
+    {
+        // updatePollEvents();
+        sf::Event event;
+        while (window->pollEvent(event))
+        {
+            if (event.Event::type == sf::Event::Closed)
+            {
+                // handling close events (including closing socket ... )
+                window->close();
+            }
+        }
+        window->clear();
+        window->draw(background);
+        window->display();
+    }
 }
