@@ -1,14 +1,15 @@
 #ifndef EN_DE_MSG_H
 #define EN_DE_MSG_H
 #include <iostream>
-#include "socket\message.h"
-// ??? ,help 
+#include "message.hpp"
+
 #include <map>
 #include <vector>
 #include <tuple>
 #include <string>
+
 using namespace std;
-// just for test, replace by the real question class in game
+// just for test, replace by the real question class in game, này có rồi
 struct question
 {
 string content;

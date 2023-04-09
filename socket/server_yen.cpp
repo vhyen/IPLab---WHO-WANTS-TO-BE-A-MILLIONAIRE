@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <map>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -10,9 +11,12 @@
 #include <unistd.h>
 #include <thread>
 #include <mutex>
+
+#include "GamePlay.hpp"
+
 #define MAX_LEN 200
 #define NUM_COLORS 6
-#define PORT 2345
+#define PORT 10000
 
 using namespace std;
 
@@ -30,6 +34,9 @@ string colors[]={"\033[31m", "\033[32m", "\033[33m", "\033[34m", "\033[35m","\03
 int seed=0;
 mutex cout_mtx,clients_mtx;
 
+bool isInGame;
+GamePlay gameplay;
+
 string color(int code);
 void set_name(int id, char name[]);
 void shared_print(string str, bool endLine);
@@ -37,6 +44,7 @@ int broadcast_message(string message, int sender_id);
 int broadcast_message(int num, int sender_id);
 void end_connection(int id);
 void handle_client(int client_socket, int id);
+void runGame();
 
 int main()
 {
@@ -44,11 +52,16 @@ int main()
 	int server_socket;
     server_socket=socket(AF_INET,SOCK_STREAM,0);
 	server.sin_family=AF_INET;
-	server.sin_port=htons(PORT);
-	server.sin_addr.s_addr=INADDR_ANY;
-	bzero(&server.sin_zero,0);
+	server.sin_port=htons(8080);
+	server.sin_addr.s_addr=htonl(INADDR_ANY);
+	//bzero(&server.sin_zero,0);
 
-    bind(server_socket,(struct sockaddr *)&server,sizeof(struct sockaddr_in));
+	int option = 1;
+	setsockopt(server_socket, SOL_SOCKET, SO_REUSEADDR, &option, sizeof(option));
+
+	bind(server_socket,(struct sockaddr*)&server,sizeof(server));
+
+	cout << server.sin_port << endl;
 
 	if((listen(server_socket,10))==0)
 	{
@@ -159,16 +172,34 @@ void end_connection(int id)
 void handle_client(int client_socket, int id)
 {
 	char name[MAX_LEN],str[MAX_LEN];
-	recv(client_socket,name,sizeof(name),0);
+
+	// handle username
+	bool isValidUsername = false;
+	while (!isValidUsername) {
+		char name[MAX_LEN];
+		recv(client_socket,name,sizeof(name),0);
+		string inputName = string(name);
+		cout << "checking " << inputName << endl;
+		int i = 0;
+		for (i; i < clients.size() ;i++) {
+			if (clients[i].name == inputName) {
+				isValidUsername = false;
+				cout << "already existed\n";
+				string message = "NO";
+				char sent[MAX_LEN];
+				strcpy(sent, message.c_str());
+				send(client_socket, sent, sizeof(sent), 0);
+				break;
+			}
+		}
+		if (i == clients.size())isValidUsername = true;
+	}
+	string message = "OK";
+	char sent[MAX_LEN];
+	strcpy(sent, message.c_str());
+	send(client_socket, sent, sizeof(sent), 0);
 	set_name(id,name);	
 
-	// Display welcome message
-	string welcome_message=string(name)+string(" has joined");
-	broadcast_message("#NULL",id);	
-	broadcast_message(id,id);								
-	broadcast_message(welcome_message,id);	
-	shared_print(color(id)+welcome_message+def_col);
-	
 	while(1)
 	{
 		int bytes_received=recv(client_socket,str,sizeof(str),0);
@@ -191,3 +222,20 @@ void handle_client(int client_socket, int id)
 		shared_print(color(id)+name+" : "+def_col+str);		
 	}	
 }
+
+
+void runGame() {
+	// init gameplay
+	if (clients.size() == 5) isInGame = true;
+	vector<string> usernames;
+	map<string, int> user_index;
+	for (int i = 0; i < clients.size(); i++) {
+		usernames.push_back(clients[i].name);
+		user_index[clients[i].name] = i;
+	}
+	// gameplay.initPlayers(usernames);
+	// gameplay.initQuestions();
+	gameplay.startGame(usernames);
+}
+
+

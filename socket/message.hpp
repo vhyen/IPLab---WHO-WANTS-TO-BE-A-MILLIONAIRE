@@ -31,13 +31,14 @@ public:
     };
     enum
     {
-        max_body_length = 511
+        max_body_length = 199
     };
     enum
     {
         max_length = header_length + max_body_length
     };
     message() : body_length_(0) {}
+
     message(message_header header, std::string msg)
     {
         for (int i = 0; i < max_length; i++)
@@ -64,10 +65,13 @@ public:
     {
         return max_length;
     }
+
+    /* return message header */
     message_header header()
     {
         return data_[0];
     }
+    /*return body string*/
     string body()
     {
         string body = "";

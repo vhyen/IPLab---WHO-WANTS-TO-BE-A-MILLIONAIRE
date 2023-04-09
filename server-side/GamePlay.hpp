@@ -43,6 +43,7 @@ public:
     //bool registerOK(std::string name);
     
     // process management
+    // start game, set game is not end, init players and questions
     void startGame(std::vector<std::string> usernames);
     int processPlayerChoice(int option);
     void processMoveTurn();

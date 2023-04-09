@@ -11,17 +11,40 @@
 #include <thread>
 #include <signal.h>
 #include <mutex>
+
+#include "SFML/Graphics.hpp"
+#include "Register.hpp"
+
+
 #define MAX_LEN 200
 #define NUM_COLORS 6
-#define PORT 50952
+#define PORT 50894
 
 using namespace std;
+
+// message header
+typedef char message_header;
+const message_header ASK_NICKNAME = 0;
+const message_header NICKNAME_OK = 1;
+const message_header ANSWER_NICKNAME = 2;
+const message_header ANSWER_QUESTION = 3;
+const message_header QUESTION = 4;
+const message_header GAME_START = 5;
+const message_header GAME_FINISH = 6;
+const message_header RESULTS_OF_SET = 7;
+const message_header YOU_WIN = 8;
 
 bool exit_flag=false;
 thread t_send, t_recv;
 int client_socket;
 string def_col="\033[0m";
 string colors[]={"\033[31m", "\033[32m", "\033[33m", "\033[34m", "\033[35m", "\033[36m"};
+
+// render
+sf::RenderWindow window(sf::VideoMode(2560, 1440), "Who wants to be millionaire?");
+Register rgt(&window);
+// game control
+bool isInGame;
 
 void catch_ctrl_c(int signal);
 string color(int code);
@@ -31,6 +54,7 @@ void recv_message(int client_socket);
 
 int main()
 {
+
 	if((client_socket=socket(AF_INET,SOCK_STREAM,0))==-1)
 	{
 		perror("socket: ");
@@ -40,8 +64,7 @@ int main()
 	struct sockaddr_in client;
 	client.sin_family=AF_INET;
 	client.sin_addr.s_addr=INADDR_ANY;
-	client.sin_port=htons(PORT); // Port no. of server
-	// client.sin_addr.s_addr=inet_addr("127.0.0.1"); // Provide IP address of server
+	client.sin_port=htons(PORT);
 	bzero(&client.sin_zero,0);
 
 	if((connect(client_socket,(struct sockaddr *)&client,sizeof(struct sockaddr_in)))==-1)
@@ -49,11 +72,43 @@ int main()
 		perror("connect: ");
 		exit(-1);
 	}
+	
 	signal(SIGINT, catch_ctrl_c);
 	char name[MAX_LEN];
-	cout<<"Enter your name : ";
-	cin.getline(name,MAX_LEN);
+
+	rgt.render();
+	string username = rgt.getUsername();
+	strcpy(name, username.c_str());
+
 	send(client_socket,name,sizeof(name),0);
+
+	char response[MAX_LEN];
+	recv(client_socket,response,sizeof(response),0);
+	cout << "response: " << string(response) << endl;
+	bool existedUsername = (string(response) == "OK") ? false : true;
+	while (existedUsername) {
+		rgt.existedUsername();
+		rgt.render();
+		string username = rgt.getUsername();
+		strcpy(name, username.c_str());
+		send(client_socket,name,sizeof(name),0);
+		char response[MAX_LEN];
+		recv(client_socket,response,sizeof(response),0);
+		cout << "response: " << string(response) << endl;
+		existedUsername = (string(response) == "OK") ? false : true;
+	}
+	
+	rgt.reset();
+	rgt.render();
+
+	char str[MAX_LEN];
+	string exit = "#exit";
+	strcpy(str, exit.c_str());
+	send(client_socket,str,sizeof(str),0);
+
+	return 0;
+
+	// =================================== STOP ===============================
 
 	cout<<colors[NUM_COLORS-1]<<"\n\t  ====== Welcome to the chat-room ======   "<<endl<<def_col;
 
@@ -105,9 +160,10 @@ void send_message(int client_socket)
 	{
 		cout<<colors[1]<<"You : "<<def_col;
 		char str[MAX_LEN];
+        // str = question.to_message();
 		cin.getline(str,MAX_LEN);
 		send(client_socket,str,sizeof(str),0);
-		if(strcmp(str,"#exit")==0)
+		if(strcmp(str,"#exit")==0 || !window.isOpen())
 		{
 			exit_flag=true;
 			t_recv.detach();	
@@ -124,19 +180,21 @@ void recv_message(int client_socket)
 	{
 		if(exit_flag)
 			return;
-		char name[MAX_LEN], str[MAX_LEN];
-		int color_code;
-		int bytes_received=recv(client_socket,name,sizeof(name),0);
+		char header[MAX_LEN], body[MAX_LEN];
+		int color_code = 0;
+		int bytes_received=recv(client_socket, header,sizeof(header), 0);
 		if(bytes_received<=0)
 			continue;
-		// recv(client_socket,&color_code,sizeof(color_code),0);
-		recv(client_socket,str,sizeof(str),0);
+
+		recv(client_socket,body,sizeof(body),0); 
+
+
 		eraseText(6);
-		if(strcmp(name,"#NULL")!=0)
-			cout<<color(color_code)<<name<<" : "<<def_col<<str<<endl;
+		if(strcmp(header,"#NULL")!=0)
+			cout << header <<endl;
 		else
-			cout<<color(color_code)<<str<<endl;
-		cout<<colors[1]<<"You : "<<def_col;
+			cout<<color(color_code)<<body<<endl;
+		cout<<colors[1]<<"You : "<<def_col; 
 		fflush(stdout);
-	}	
+	}
 }

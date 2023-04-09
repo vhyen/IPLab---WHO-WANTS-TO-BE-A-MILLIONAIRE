@@ -30,4 +30,5 @@ class Register {
     void renderWaiting();
     std::string getUsername();
     bool isDoneRegister();
+    void reset();
 };

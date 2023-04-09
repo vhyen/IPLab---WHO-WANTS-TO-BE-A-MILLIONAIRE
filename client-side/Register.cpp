@@ -94,6 +94,7 @@ void Register::updatePollEvents()
 
 void Register::existedUsername()
 {
+    isDone = false;
     displayNoti.setString("This username is alreaday existed.\nPlease choose another one. ");
 }
 
@@ -139,4 +140,8 @@ void Register::renderWaiting()
         window->draw(background);
         window->display();
     }
+}
+
+void Register::reset() {
+    isDone = false;
 }

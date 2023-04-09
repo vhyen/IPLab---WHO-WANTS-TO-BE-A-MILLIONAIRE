@@ -13,6 +13,7 @@ class Question {
 
     Question();
     Question(std::string quest, std::string optionA, std::string optionB, std::string optionC, std::string optionD, std::string ans);
+    void toMessageBody(char str[]);
 };
 
 #endif /* Question_hpp */

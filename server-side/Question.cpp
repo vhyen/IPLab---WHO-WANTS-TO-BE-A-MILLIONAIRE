@@ -14,3 +14,14 @@ Question::Question(std::string quest, std::string optionA, std::string optionB, 
     options.push_back(optionD);
     answer = ans;
 };
+
+
+void Question::toMessageBody(char str[]) {
+    std::string message = "";
+    message += question;
+    for (std::string each : options) {
+        message += "|";
+        message += each;
+    }
+    strcpy(str, message.c_str());
+}
