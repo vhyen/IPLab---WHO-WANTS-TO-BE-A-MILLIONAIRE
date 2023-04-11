@@ -13,7 +13,7 @@
 #include <mutex>
 #define MAX_LEN 200
 #define NUM_COLORS 6
-#define PORT 58547
+#define PORT 10000
 
 using namespace std;
 

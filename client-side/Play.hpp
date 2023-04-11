@@ -26,29 +26,39 @@ private:
     sf::Clock clock;
     std::vector<Player> players;
     std::vector<std::string> usernames;
+    
+    bool optChosen;
+    std::string option;
 
     Question curQuestion;
     sf::Text question, optA, optB, optC, optD;
     sf::Vector2f posQuestion, posOptA, posOptB, posOptC, posOptD, sizeOpt;
+    
+    sf::Texture scrBackground;
+    sf::Sprite background;
 
 public:
     Play();
     void setWindow(sf::RenderWindow* wd);
+    void setUsername(std::string username);
     void Init(); //inital status of user
     void Registered(); //is call when user want to create a username
     void Skip();//is Call when user choose to skip a question 
-    void getQuestion(Question);
     void PlayATurn(std::string question, std::string optionA, std::string optionB, std::string optionC, std::string optionD);//is call when it is user's turn and server send a question
-    void handleClickEvent(int x, int y);
 
     // init resources
     void initPlayers(std::vector<std::string>);
+    void getPlayerAndQuestion(std::string player, Question question);
 
     // render
+    std::string handleClickEvent(int x, int y);
     void animatePlayers();
     void renderPlayers();
     void renderQuestion();
-    void render();
+    void render(); 
+
+
+    std::string getChosenOption();
 };
 
 #endif 

@@ -45,11 +45,13 @@ public:
     // process management
     // start game, set game is not end, init players and questions
     void startGame(std::vector<std::string> usernames);
-    int processPlayerChoice(int option);
+    int processPlayerChoice(std::string option);
     void processMoveTurn();
     void processNextPlayer();
     bool isEndGame();
     std::string getWinner();
+    void encodeSentQuestion(char message[]);
+    std::string getPlayerAndQuestion();
 
     // player management
     void disqualifyCurrentPlayer();
@@ -60,7 +62,7 @@ public:
     int getNumOfQuestions();
     std::vector<std::string> getPlayers(); // trả về usernames
     Question getQuestion(); // cái hàm này trả về câu hỏi và 4 câu trả lời
-    bool checkAnswer(int ans);
+    bool checkAnswer(std::string ans);
 
 };
 

@@ -76,7 +76,7 @@ void GamePlay::startGame(std::vector<std::string> usernames)
     initQuestions();
 }
 
-int GamePlay::processPlayerChoice(int option)
+int GamePlay::processPlayerChoice(std::string option)
 {
     if (currentQuestion == questions.size() - 1)
     {
@@ -84,7 +84,7 @@ int GamePlay::processPlayerChoice(int option)
         isEnd = true;
         return 1;
     }
-    if (option == 0)
+    if (option == "move")
     {
         // xu ly player da xai move roi?
         players[currentPlayer].haveMove = false;
@@ -124,6 +124,31 @@ std::string GamePlay::getWinner()
     return winner;
 }
 
+void GamePlay::encodeSentQuestion(char message[]) {
+    Question q = getQuestion();
+    std::string str = nextPlayer() + "|";
+    str += q.question;
+    for (std::string each : q.options) {
+        str += "|";
+        str += each;
+    }
+    std::cout << str << std::endl;
+    strcpy(message, str.c_str());
+    // return str;
+} 
+
+std::string GamePlay::getPlayerAndQuestion() {
+    Question q = getQuestion();
+    std::string str = nextPlayer() + "|";
+    str += q.question;
+    for (std::string each : q.options) {
+        str += "|";
+        str += each;
+    }
+    std::cout << str << std::endl;
+    return str;
+}
+
 // player management
 void GamePlay::disqualifyCurrentPlayer()
 {
@@ -153,24 +178,9 @@ std::string GamePlay::nextPlayer()
     return players[currentPlayer].username;
 }
 
-bool GamePlay::checkAnswer(int ans)
+bool GamePlay::checkAnswer(std::string ans)
 {
-    std::string convertedAnswer;
-    switch (ans)
-    {
-    case 1:
-        convertedAnswer = "A";
-        break;
-    case 2:
-        convertedAnswer = "B";
-        break;
-    case 3:
-        convertedAnswer = "C";
-        break;
-    case 4:
-        convertedAnswer = "D";
-        break;
-    }
+    std::string convertedAnswer = ans;
     if (convertedAnswer == questions[currentQuestion].answer)
         return true;
     return false;
@@ -187,10 +197,15 @@ Question GamePlay::getQuestion()
     return q;
 }
 
+
+
 int GamePlay::getNumOfQuestions()
 {
     return questions.size();
 }
+
+
+
 
 /*
 start
